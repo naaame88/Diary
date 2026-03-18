@@ -289,7 +289,7 @@ body, html {
     
     /* 일기 제목 스타일도 함께 조정 */
     .post-title-display {
-        font-size: 2.2rem;
+        font-size: 1.5rem;
         margin-bottom: 1rem;
         font-family: 'Playfair Display', serif; /* 제목은 세리프체 권장 */
     }
