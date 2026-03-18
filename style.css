@@ -282,7 +282,7 @@ body, html {
 /* 모바일 전용 (iPhone, Android 등 작은 화면) */
 @media (max-width: 768px) {
     .item-text, .section-description {
-        font-size: 3.2rem; /* 모바일에서 한 번 더 키우기 */
+        font-size: 2.0rem !important; /* 모바일에서 한 번 더 키우기 */
         line-height: 1.8;
         padding: 0 5px;
     }
