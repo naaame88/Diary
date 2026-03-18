@@ -254,3 +254,27 @@ body, html {
     border-radius: 8px;
     margin-bottom: 30px !important;
 }
+
+/* 영문 다이어리 본문 스타일 최적화 */
+.item-text, .section-description {
+    /* 1. 글자 크기: 모바일에서도 시원하게 보이도록 설정 */
+    font-size: 1.2rem; 
+    
+    /* 2. 가독성: 영문은 줄 간격이 넓어야 에세이 느낌이 납니다 */
+    line-height: 1.75; 
+    
+    /* 3. 자간 및 단어 간격: 영문 가독성의 핵심 */
+    letter-spacing: 0.01em;
+    word-spacing: 0.05em;
+
+    /* 4. 폰트: 시스템 폰트보다 세련된 느낌을 위해 (이미 연결된 폰트가 있다면 적용됨) */
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: 300; /* 너무 두껍지 않게 설정하여 세련미 강조 */
+    
+    color: #2c2c2c;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+    
+    /* 영문은 양쪽 정렬(justify)을 하면 모바일에서 간격이 벌어져 어색할 수 있으므로 왼쪽 정렬 권장 */
+    text-align: left; 
+}
