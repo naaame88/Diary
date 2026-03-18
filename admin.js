@@ -18,6 +18,49 @@ const container = document.getElementById('sections-container');
 const addBtn = document.getElementById('add-section-btn');
 let thumbnailIndex = 0;
 
+/**
+ * 이미지를 리사이징하고 압축하여 Base64 문자열로 반환하는 함수
+ * @param {File} file - 업로드된 이미지 파일
+ * @returns {Promise<string>} - 압축된 Base64 데이터
+ */
+function compressImage(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // 1. 최대 가로 크기 설정 (800px 정도면 모바일/웹에서 충분히 선명합니다)
+                const MAX_WIDTH = 800;
+                let width = img.width;
+                let height = img.height;
+
+                if (width > MAX_WIDTH) {
+                    height *= MAX_WIDTH / width;
+                    width = MAX_WIDTH;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                // 2. 캔버스에 이미지 그리기
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // 3. JPEG 포맷으로 압축 (0.6은 60% 화질을 의미하며, 용량이 획기적으로 줄어듭니다)
+                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+                
+                resolve(compressedBase64);
+            };
+            img.onerror = (err) => reject(err);
+        };
+        reader.onerror = (err) => reject(err);
+    });
+}
+
 function bindEvents(section, index) {
     const fileInput = section.querySelector('.item-file');
     const previewImg = section.querySelector('.preview-area img');
