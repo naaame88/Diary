@@ -18,47 +18,23 @@ const container = document.getElementById('sections-container');
 const addBtn = document.getElementById('add-section-btn');
 let thumbnailIndex = 0;
 
-/**
- * 이미지를 리사이징하고 압축하여 Base64 문자열로 반환하는 함수
- * @param {File} file - 업로드된 이미지 파일
- * @returns {Promise<string>} - 압축된 Base64 데이터
- */
-function compressImage(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-            const img = new Image();
-            img.src = event.target.result;
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
+async function uploadToImgBB(file) {
+    const apiKey = "85ef06b718b1a5994d079cb97160019b"; 
+    const formData = new FormData();
+    formData.append("image", file);
 
-                // 1. 최대 가로 크기 설정 (800px 정도면 모바일/웹에서 충분히 선명합니다)
-                const MAX_WIDTH = 800;
-                let width = img.width;
-                let height = img.height;
-
-                if (width > MAX_WIDTH) {
-                    height *= MAX_WIDTH / width;
-                    width = MAX_WIDTH;
-                }
-
-                canvas.width = width;
-                canvas.height = height;
-
-                // 2. 캔버스에 이미지 그리기
-                ctx.drawImage(img, 0, 0, width, height);
-
-                // 3. JPEG 포맷으로 압축 (0.6은 60% 화질을 의미하며, 용량이 획기적으로 줄어듭니다)
-                const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
-                
-                resolve(compressedBase64);
-            };
-            img.onerror = (err) => reject(err);
-        };
-        reader.onerror = (err) => reject(err);
+    const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+        method: "POST",
+        body: formData
     });
+
+    const data = await response.json();
+    if (data.success) {
+        console.log("업로드 성공! 주소:", data.data.url);
+        return data.data.url; // 이 주소를 Firestore에 저장하면 끝!
+    } else {
+        throw new Error("업로드 실패");
+    }
 }
 
 function bindEvents(section, index) {
@@ -134,16 +110,26 @@ document.getElementById('diary-form').onsubmit = async (e) => {
 
     try {
         submitBtn.disabled = true;
-        submitBtn.innerText = "Publishing...";
+        submitBtn.innerText = "Uploading Images..."; // 상태 표시 변경
 
         for (let el of sectionElements) {
-            const imgEl = el.querySelector('.preview-area img');
+            const fileInput = el.querySelector('.item-file');
             const txt = el.querySelector('.item-text').value;
-            
-            const imgSrc = (imgEl && imgEl.style.display !== 'none') ? imgEl.src : "";
-            
-            sectionsData.push({ img: imgEl.src, txt: txt });
+            let finalImgUrl = "";
+
+            // [중요] input에 파일이 있다면 ImgBB로 업로드합니다.
+            if (fileInput && fileInput.files[0]) {
+                finalImgUrl = await uploadToImgBB(fileInput.files[0]);
+            }
+
+            // 이제 원본(Base64)이 아닌 ImgBB에서 받은 '주소'를 넣습니다.
+            sectionsData.push({ 
+                img: finalImgUrl, 
+                txt: txt 
+            });
         }
+
+        submitBtn.innerText = "Saving to Database...";
 
         await addDoc(collection(db, "diaries"), {
             title: document.getElementById('post-title').value,
@@ -155,7 +141,8 @@ document.getElementById('diary-form').onsubmit = async (e) => {
         alert("Successfully published!");
         window.location.href = "archive.html";
     } catch (err) {
-        alert(err.message);
+        console.error(err);
+        alert("Error: " + err.message);
         submitBtn.disabled = false;
         submitBtn.innerText = "PUBLISH STORY";
     }
