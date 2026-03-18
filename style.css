@@ -1,0 +1,256 @@
+/* style.css */
+
+/* 전체적인 흑백 테마 설정 */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh; /* height: 100% 대신 사용 */
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto !important; /* 스크롤 강제 허용 */
+}
+
+/* 1. 고양이를 중앙에 오게 하는 컨테이너 */
+.landing-container {
+    display: flex;
+    justify-content: center; /* 가로 중앙 */
+    align-items: center;    /* 세로 중앙 */
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+/* 2. 클릭 트리거 스타일 */
+.cat-trigger {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.4s ease-out; /* 클릭 시 약간 작아지는 효과 */
+}
+
+/* 마우스를 올렸을 때 클릭 트리거가 살짝 반응 */
+.cat-trigger:hover {
+    transform: scale(1.02); /* 2% 정도 커짐 */
+}
+
+/* 3. 중앙 고양이 이미지 스타일 */
+.central-cat {
+    max-width: 45vw;
+    height: auto;
+    /* 하얀 배경에서는 그림자를 검은색 계열로 연하게 줍니다 */
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.1)); 
+    transition: all 0.5s ease;
+}
+
+.cat-trigger:hover .central-cat {
+    filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.15));
+    transform: translateY(-10px); /* 위로 살짝 떠오르는 느낌 */
+}
+
+/* 4. 황금비 나선 SVG (옵션) 스타일 */
+.golden-spiral {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9); /* 중앙 배치 */
+    width: 110%; /* 고양이보다 약간 크게 */
+    height: 110%;
+    stroke: rgba(255, 255, 255, 0); /* 초기에는 투명 */
+    stroke-width: 0.5;
+    fill: none;
+    transition: stroke 0.6s, transform 0.6s ease-out;
+}
+
+/* 마우스를 올렸을 때 나선이 은은하게 나타남 */
+.cat-trigger:hover .golden-spiral {
+    stroke: rgba(255, 255, 255, 0.4); /* 흰색 나선 */
+    transform: translate(-50%, -50%) scale(1); /* 크기도 정상으로 */
+}
+
+/* 5. 전환 오버레이 스타일 (처음엔 숨김) */
+.transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #FFFFFF;
+    opacity: 0; /* 처음엔 투명 */
+    visibility: hidden; /* 상호작용 불가 */
+    z-index: 100; /* 가장 위에 */
+    transition: opacity 0.8s ease-in-out, visibility 0.8s;
+}
+
+/* 클래스가 추가되면 오버레이가 나타남 */
+.transition-overlay.active {
+    opacity: 1; /* 완전히 블랙으로 가림 */
+    visibility: visible;
+}
+
+.landing-container::before {
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+    font-size: 12px;
+    letter-spacing: 5px;
+    color: #cccccc; /* 아주 연한 회색 */
+}
+
+/* --- Archive Page Styles --- */
+
+.archive-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 가로 중앙 정렬 */
+    width: 100%;
+}
+
+/* 네비게이션 */
+.archive-nav {
+    padding: 40px 0;
+}
+
+.back-button {
+    text-decoration: none;
+    color: #999;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    transition: color 0.3s;
+    text-transform: uppercase;
+}
+
+.back-button:hover {
+    color: #000;
+}
+
+/* 헤더 영역 */
+.archive-header, .diary-list, .archive-footer {
+    width: 100%;
+    max-width: 800px;    /* PC에서 너무 퍼지지 않게 제한 */
+    margin: 0 auto;      /* 중앙 배치 */
+    padding: 0 20px;     /* 모바일 좌우 여백 */
+    box-sizing: border-box;
+}
+
+.archive-header {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.archive-header .subtitle {
+    font-size: 0.7rem;
+    letter-spacing: 5px;
+    color: #bbb;
+    margin-bottom: 10px;
+}
+
+.archive-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: -1px;
+}
+
+.divider {
+    width: 40px;
+    height: 1px;
+    background-color: #000;
+    margin: 30px auto;
+}
+
+/* 일기 리스트 아이템 */
+.diary-list {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.diary-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 30px 0;    /* 좌우 마진 대신 패딩 사용 */
+    margin: 0;          /* 기존의 margin: 0 40px 삭제 */
+    border-bottom: 1px solid #eee;
+}
+
+.diary-item:hover {
+    transform: translateX(15px); /* 호버 시 우측으로 살짝 이동 */
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-info .date {
+    font-size: 0.7rem;
+    color: #aaa;
+    letter-spacing: 2px;
+}
+
+.item-info .title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-top: 10px;
+    font-weight: 400;
+}
+
+/* 썸네일 (황금비 1:1 또는 4:3 비율 느낌) */
+.item-thumbnail {
+    width: 120px;
+    height: 80px;
+    margin-left: 20px;  /* 텍스트와의 간격만 유지 */
+    margin-right: 0;    /* 오른쪽 치우침 방지 */
+    flex-shrink: 0;
+}
+
+.thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지를 꽉 채우되 비율 유지 */
+    filter: grayscale(100%); /* 흑백 처리하여 미니멀함 강조 */
+    transition: filter 0.5s;
+}
+
+.diary-item:hover {
+    transform: none;    /* 옆으로 밀리는 효과가 정렬을 깨뜨릴 수 있어 제거 */
+    opacity: 0.7;
+}
+
+.empty-thumb {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #f3f3f3 25%, #f9f9f9 25%, #f9f9f9 50%, #f3f3f3 50%, #f3f3f3 75%, #f9f9f9 75%, #f9f9f9 100%);
+    background-size: 10px 10px;
+}
+
+.arrow {
+    font-size: 1.2rem;
+    color: #eee;
+    transition: color 0.3s;
+}
+
+.diary-item:hover .arrow {
+    color: #000;
+}
+
+/* 푸터 */
+.archive-footer {
+    padding: 100px 0 50px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #ccc;
+    letter-spacing: 2px;
+}
+
+/* 관리자 페이지 섹션 간격 조절 */
+.content-section {
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 30px !important;
+}
