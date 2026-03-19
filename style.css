@@ -281,15 +281,16 @@ body, html {
 
 /* 모바일 전용 (iPhone, Android 등 작은 화면) */
 @media (max-width: 768px) {
-    .item-text, .section-description {
-        font-size: 2.0rem !important; /* 모바일에서 한 번 더 키우기 */
-        line-height: 1.8;
-        padding: 0 5px;
+    .item-text, .section-description, p {
+        font-size: 2.2rem !important; /* 2.0에서 조금 더 키웠습니다 */
+        line-height: 1.8 !important;
+        padding: 0 15px !important;
+        display: block !important; /* 가끔 inline 요소로 잡히면 크기가 안 변함 */
     }
     
     /* 일기 제목 스타일도 함께 조정 */
     .post-title-display {
-        font-size: 1.5rem;
+        font-size: 2.2rem;
         margin-bottom: 1rem;
         font-family: 'Playfair Display', serif; /* 제목은 세리프체 권장 */
     }
