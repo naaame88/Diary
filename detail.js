@@ -33,7 +33,7 @@ async function loadDetail() {
                 const sectionHtml = `
                     <div class="story-section" style="margin-bottom: 50px;">
                         <img src="${item.img}" style="width: 100%; border-radius: 5px; margin-bottom: 15px;">
-                        <p style="white-space: pre-wrap; line-height: 1.8;">${item.txt}</p>
+                        <p class="section-description" style="white-space: pre-wrap;">${item.txt}</p>
                     </div>`;
                 contentArea.innerHTML += sectionHtml;
             });
