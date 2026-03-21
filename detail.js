@@ -45,26 +45,26 @@ async function loadDetail() {
                 
                 // 여러 장의 사진 처리 (imgs 배열)
                 if (item.imgs && item.imgs.length > 0) {
-                    // margin-bottom을 0으로 설정하여 하단 공백 제거
                     photosHtml = '<div class="photo-group" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 0;">';
+                    
+                    // [수정] url이 실제로 존재할 때만 img 태그를 만듭니다.
                     item.imgs.forEach(url => {
-                        // display: block으로 이미지 하단 미세 공백 제거
-                        photosHtml += `<img src="${url}" style="width: 100%; border-radius: 2px; display: block; object-fit: cover; aspect-ratio: 1/1;">`;
+                        if (url && url.trim() !== "") { 
+                            photosHtml += `<img src="${url}" style="width: 100%; border-radius: 2px; display: block; object-fit: cover; aspect-ratio: 1/1;">`;
+                        }
                     });
                     photosHtml += '</div>';
-                } 
+                }
                 // 단일 사진 처리 (기존 데이터 호환)
                 else if (item.img) {
                     photosHtml = `<img src="${item.img}" style="width: 100%; border-radius: 2px; display: block; margin-bottom: 0;">`;
                 }
             
                 const sectionHtml = `
-                    <div class="story-section" style="margin-bottom: 0px;">
-                        ${photosHtml}
-                        <p style="margin-top: 0 !important; padding-top: 1px; font-size: 1.1rem; line-height: 1.8; white-space: pre-wrap;">
-                            ${item.txt}
-                        </p>
-                    </div>`;
+                <div class="story-section" style="margin-bottom:0px;">
+                ${photosHtml}
+                <p style="margin-top:0; padding-top:0; font-size:1.1rem; line-height:1.8; white-space:pre-wrap;">${item.txt}</p>
+                </div>`;
                 contentArea.innerHTML += sectionHtml;
             });
         }
