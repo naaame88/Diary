@@ -254,3 +254,18 @@ body, html {
     border-radius: 8px;
     margin-bottom: 30px !important;
 }
+
+/* 일기 상세 페이지 텍스트 스타일 */
+.story-section {
+    margin-bottom: 60px; /* 섹션 사이 여백 */
+}
+
+.story-text {
+    font-size: 0.85rem; /* 작고 정갈한 크기 */
+    line-height: 2;    /* 줄 간격을 넓게 하여 고급스러운 여백 확보 */
+    color: #333;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.5px; /* 영문일 경우 자간을 살짝 넓히면 더 기록물 같아 보임 */
+    white-space: pre-wrap;
+    margin-top: 20px;
+}
