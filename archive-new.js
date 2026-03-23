@@ -28,11 +28,22 @@ async function loadDiaries() {
             month: 'short', day: 'numeric', year: 'numeric'
         }).toUpperCase() : "DATE UNKNOWN";
 
-        // 썸네일 선택 로직
-        let thumbnail = 'images/cat-main.png';
+        // 2. 썸네일 경로 안전하게 가져오기 (수정된 로직)
+        let thumbnail = 'images/cat-main.png'; // 기본 이미지 설정
+        
         if (data.sections && data.sections.length > 0) {
             const tIdx = data.thumbnailIndex || 0;
-            thumbnail = data.sections[tIdx].img;
+            const section = data.sections[tIdx];
+            
+            if (section) {
+                 if (Array.isArray(section.imgs) && section.imgs.length > 0) {
+                    thumbnail = section.imgs[0];
+                } 
+                
+                else if (section.img) {
+                    thumbnail = section.img;
+                }
+            }
         }
 
         const itemHtml = `
