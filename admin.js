@@ -175,6 +175,7 @@ document.getElementById('diary-form').onsubmit = async (e) => {
 
         await addDoc(collection(db, "diaries"), {
             title: document.getElementById('post-title').value,
+            music: document.getElementById('post-music').value,
             sections: sectionsData, // 수정된 데이터 구조
             thumbnailIndex: thumbnailIndex,
             createdAt: serverTimestamp()

@@ -269,3 +269,22 @@ body, html {
     white-space: pre-wrap;
     margin-top: 20px;
 }
+
+/* 클릭 가능한 이미지에 호버 효과 */
+.zoomable-img {
+    transition: opacity 0.3s ease;
+}
+
+.zoomable-img:hover {
+    opacity: 0.8;
+}
+
+/* 모달 안의 이미지 부드러운 애니메이션 */
+#modal-img {
+    animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}

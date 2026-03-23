@@ -15,7 +15,14 @@
     <main style="max-width: 800px; margin: 0 auto; padding: 40px 20px;">
         <p id="detail-date" style="letter-spacing: 2px; color: #aaa; font-size: 0.8rem;"></p>
         <h1 id="detail-title" style="font-family: 'Playfair Display', serif; font-size: 3rem; margin: 20px 0;"></h1>
-    
+
+        <div id="music-container" style="display: none; margin-bottom: 40px; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 10px 0;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 0.8rem; letter-spacing: 1px; color: #999; text-transform: uppercase;">Soundtrack</span>
+                <span id="detail-music" style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; color: #333;"></span>
+            </div>
+        </div>
+
         <div id="detail-content" style="line-height: 1.8; font-size: 1.1rem; white-space: pre-wrap; font-family: 'Montserrat', sans-serif;">
         </div><div id="detail-content" style="line-height: 1.4; font-size: 1.1rem; white-space: normal;"></div>
 
@@ -50,5 +57,10 @@
         }
     </script>
     <script type="module" src="detail.js"></script>
+
+    <div id="photo-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; cursor: pointer;">
+        <img id="modal-img" src="" style="max-width: 90%; max-height: 90%; object-fit: contain; transition: transform 0.3s ease;">
+        <span style="position: absolute; top: 20px; right: 30px; color: #fff; font-size: 30px; font-family: 'Montserrat';">&times;</span>
+    </div>
 </body>
 </html>

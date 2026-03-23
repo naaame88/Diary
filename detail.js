@@ -35,6 +35,15 @@ async function loadDetail() {
     if (docSnap.exists()) {
         const data = docSnap.data();
         document.getElementById('detail-title').innerText = data.title;
+        const musicContainer = document.getElementById('music-container');
+        const musicElement = document.getElementById('detail-music');
+        
+        if (data.music && data.music.trim() !== "") {
+            musicElement.innerText = data.music;
+            musicContainer.style.display = 'block'; // 음악이 있을 때만 노출
+        } else {
+            musicContainer.style.display = 'none';
+        }
         const contentArea = document.getElementById('detail-content');
         contentArea.innerHTML = ''; 
 
@@ -45,25 +54,34 @@ async function loadDetail() {
                 
                 // 여러 장의 사진 처리 (imgs 배열)
                 if (item.imgs && item.imgs.length > 0) {
-                    photosHtml = '<div class="photo-group" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 0;">';
+                    // 그리드 레이아웃 적용
+                    photosHtml = '<div class="photo-group" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 20px;">';
                     
-                    // [수정] url이 실제로 존재할 때만 img 태그를 만듭니다.
                     item.imgs.forEach(url => {
                         if (url && url.trim() !== "") { 
-                            photosHtml += `<img src="${url}" style="width: 100%; border-radius: 2px; display: block; object-fit: cover; aspect-ratio: 1/1;">`;
+                            // [추가] onclick 속성으로 클릭 시 모달 실행 + 돋보기 커서 추가
+                            photosHtml += `
+                                <img src="${url}" 
+                                     class="zoomable-img" 
+                                     onclick="openModal('${url}')" 
+                                     style="width: 100%; border-radius: 2px; display: block; object-fit: cover; aspect-ratio: 1/1; cursor: zoom-in;">`;
                         }
                     });
                     photosHtml += '</div>';
                 }
                 // 단일 사진 처리 (기존 데이터 호환)
                 else if (item.img) {
-                    photosHtml = `<img src="${item.img}" style="width: 100%; border-radius: 2px; display: block; margin-bottom: 0;">`;
+                    photosHtml = `
+                        <img src="${item.img}" 
+                             class="zoomable-img" 
+                             onclick="openModal('${item.img}')" 
+                             style="width: 100%; border-radius: 2px; display: block; margin-bottom: 20px; cursor: zoom-in;">`;
                 }
             
                 const sectionHtml = `
-                <div class="story-section">
+                <div class="story-section" style="margin-bottom: 60px;">
                 ${photosHtml}
-                <p class="story-text">${item.txt}</p>
+                <p class="story-text" style="font-size: 0.9rem; /* 폰트 크기 축소 */line-height: 2;    /* 줄 간격 넓게 */color: #333;       /* 부드러운 검정 */white-space: pre-wrap;">${item.txt}</p>
                 </div>`;
                 contentArea.innerHTML += sectionHtml;
             });
@@ -150,3 +168,18 @@ commentForm.onsubmit = async (e) => {
 
 // 페이지 로드 시 댓글 실행
 loadComments();
+
+// 모달 열기 함수
+window.openModal = function(url) {
+    const modal = document.getElementById('photo-modal');
+    const modalImg = document.getElementById('modal-img');
+    modalImg.src = url;
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+};
+
+// 모달 닫기 (배경이나 X 버튼 클릭 시)
+document.getElementById('photo-modal').addEventListener('click', function() {
+    this.style.display = 'none';
+    document.body.style.overflow = 'auto'; // 스크롤 다시 허용
+});
